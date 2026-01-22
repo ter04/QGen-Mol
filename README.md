@@ -1,6 +1,7 @@
 # Quantum-Enhanced Conditional Molecular Generation
 
-This repository contains the implementation and experimental results for the Master's Thesis: **"[Insert Your Thesis Title Here]"**.
+This repository contains the implementation and experimental results for the Master's Thesis: **Variational Quantum Autoregressive Models for Conditional
+Molecular Generation** by Esther Gallego Estevez.
 
 The project implements a hybrid **Quantum-Classical Generative Model** designed to generate valid molecular strings (SELFIES) conditioned on specific chemical properties. It benchmarks various Quantum Ansatz strategies against classical autoregressive baselines (GRU).
 
@@ -15,16 +16,19 @@ The project implements a hybrid **Quantum-Classical Generative Model** designed 
 
 The model operates as an autoregressive sequence generator. At each step , the history and target properties are processed to evolve a quantum state , which is measured to sample the next token.
 
+<img width="603" height="377" alt="image" src="https://github.com/user-attachments/assets/9954da42-f22a-411d-b49d-b44bc584dd99" />
+
+
 ### The Quantum Ansatz
 
 The core innovation lies in the Variational Quantum Circuit (VQC) design, selected via extensive ablation studies:
 
-1. **Conditional Injection:** We employ `CRX` gates (Controlled-Rotation X) rather than `CRZ`.
-* **Why?** `CRX` induces orthogonal rotation relative to the computational basis (Z-axis), ensuring immediate probability modulation and non-linear mixing with the property context ().
-
-
-2. **Hamiltonian Evolution:** Layers conclude with a Time-Evolution operator under a diagonal Hamiltonian () extended to include **Environment Qubits**.
+1. **Conditional Injection:** We employ `CRX` gates (to condition the molecular properties into the token qubits).
+2. **Hamiltonian Evolution:** Layers conclude with a Time-Evolution operator under a diagonal Hamiltonian, extended to include **Environment Qubits**.
 3. **Data Re-uploading:** Property information is re-injected at every layer depth  to preserve signal against unitary scrambling.
+
+<img width="1049" height="475" alt="image" src="https://github.com/user-attachments/assets/3fa1fd6a-eba9-48d3-adf3-7639e060651a" />
+
 
 ### Benchmark Models
 
@@ -34,22 +38,9 @@ The core innovation lies in the Variational Quantum Circuit (VQC) design, select
 
 ## 📊 Performance & Results
 
-We benchmarked the architectures on **[Insert Dataset Name, e.g., QM9/ZINC]**. Training was performed via **ideal state-vector simulation** to isolate theoretical expressivity from hardware noise.
+We benchmarked the architectures on ChEMBL. Training was performed via **ideal state-vector simulation** to isolate theoretical expressivity from hardware noise.
 
-### 1. Architecture Selection (Ablation)
+<img width="765" height="584" alt="image" src="https://github.com/user-attachments/assets/1adc940d-e87c-49d0-953e-a146fed4aa40" />
 
-Comparison of injection strategies (Single vs. Re-uploading) and Hamiltonian scope (Token vs. Token+Env).
 
-<p align="center">
-<img src="images/quantum_architecture_convergence_12x6.png" width="600" alt="Architecture Convergence">
-</p>
 
-*Result: The configuration combining Data Re-uploading with Environment Qubits (Orange) achieves the lowest validation loss and fastest convergence.*
-
-### 2. Capacity Sweep (Depth vs. Ancillas)
-
-<p align="center">
-<img src="images/quantum_capacity_sweep_convergence.png" width="600" alt="Capacity Sweep">
-</p>
-
-*Result: Increasing circuit depth () and adding ancillary qubits consistently improves density estimation performance.*
